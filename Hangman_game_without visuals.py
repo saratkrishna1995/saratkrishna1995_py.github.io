@@ -1,5 +1,66 @@
 import random
+
+stages = [r'''
+  +---+
+  |   |
+  O   |
+ /|\  |
+ / \  |
+      |
+=========
+''', r'''
+  +---+
+  |   |
+  O   |
+ /|\  |
+ /    |
+      |
+=========
+''', r'''
+  +---+
+  |   |
+  O   |
+ /|\  |
+      |
+      |
+=========
+''', '''
+  +---+
+  |   |
+  O   |
+ /|   |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+  |   |
+      |
+      |
+=========
+''', '''
+  +---+
+  |   |
+  O   |
+      |
+      |
+      |
+=========
+''', '''
+  +---+
+  |   |
+      |
+      |
+      |
+      |
+=========
+''']
+
+
+lives=6
 word_list = ["aardvark", "baboon", "camel"]
+
 chosen_word = random.choice(word_list)
 print(chosen_word)
 
@@ -8,39 +69,43 @@ word_length = len(chosen_word)
 for position in range(word_length):
     placeholder += "_"
 print(placeholder)
-display = ""
-# TODO-1: - Use a while loop to let the user guess again.
-while display!=chosen_word:
-    guess = input("Guess a letter: ").lower()
+check=False
+glist=[]
 
-# TODO-2: Change the for loop so that you keep the previous correct letters in display.
+#Using a while loop to let the user guess again
+
+while check is False:
+    guess = input("Guess a letter: ").lower()
+    display = ""
+
+#Display gets built every time a new guess is made
+
     for letter in chosen_word:
-        test = []
-        if len(display)==len(chosen_word):
-            i = 0
-            while i<len(display):
-                test.append(display[i])
-                i+=1
-            x=test
-            for y in range(0,len(display)):
-                if test[y]=="_":
-                    if guess==chosen_word[y]:
-                        x[y]=guess
-                    else:
-                        pass
-                else:
-                    pass
-            final=''
-            for alpha in x:
-                final=final+alpha
-            display=final
+        if letter in glist:
+            display +=letter
+            continue
         elif letter == guess:
-            display += letter
+            glist.append(guess)
+            print(glist)
+            display += guess
         else:
             display += "_"
-    print(display)
     if display==chosen_word:
-        print("Cheers mate! You won")
-    else:
-        print("Let us keep guessing.")
-print(f"Current Status:{final}")
+        check=True
+        print("You won! End of game")
+    print(display)
+
+#Lives adjustment when wrong guess is made
+
+    if guess not in chosen_word:
+        lives -= 1
+        print("Life lost")
+        print(stages[lives])
+
+    if "_" not in display:
+        check = True
+        print("You win.")
+
+    if lives==0:
+        print("You loose!Man hanged and game over")
+        check=True
